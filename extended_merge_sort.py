@@ -147,23 +147,14 @@ def change_input(path):
 
 def main():
     for i in range(1, 5):
-        if os.path.exists("E:\\bursa\\4 sem\\ISP\\LR2\\" + str(i) + ".txt"):
-            os.remove(str(i) + ".txt")
+        with open(str(i) + ".txt", "w"):
+            pass
 
-    if os.path.exists("E:\\bursa\\4 sem\\ISP\\LR2\\" + "output.txt"):
-        os.remove("output.txt")
+    with open("output.txt", "w"):
+        pass
 
     output_file_path = "3.txt"
-    while True:
-        try:
-            numbers_amount = int(input("Input the amount of numbers (at least 8): "))
-            if numbers_amount <= 7:
-                raise OutOfRangeValue
-            else:
-                break
-        except OutOfRangeValue:
-            print("Numbers amount is out of range!")
-
+    numbers_amount = 150000
     memory_limit = numbers_amount // 4
     chunk_size = memory_limit
     start_time = time.time()
