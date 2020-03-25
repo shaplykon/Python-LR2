@@ -1,0 +1,187 @@
+import random
+import linecache
+import os
+numbers_amount = 50
+
+
+def create_file():
+    with open('numbers.txt', 'w') as f:
+        f.writelines('{}\n'.format(random.randint(0, 100)) for _ in range(numbers_amount))
+
+
+def file_fragmentation():
+    with open("numbers.txt", "r") as file:
+        for i in range(1, 11):
+            with open(str(i) + ".txt", "w") as buffer_file:
+                for _ in range(numbers_amount // 10):
+                    buffer_file.write(file.readline())
+
+
+def merge(left, right, Array):
+    i = 0
+    j = 0
+    k = 0
+
+    while i < len(left) and j < len(right):
+        if int(left[i]) < int(right[j]):
+            Array[k] = left[i]
+            i = i + 1
+        else:
+            Array[k] = right[j]
+            j = j + 1
+
+        k = k + 1
+
+    while (i < len(left)):
+        Array[k] = left[i]
+        i = i + 1
+        k = k + 1
+
+    while (j < len(right)):
+        Array[k] = right[j]
+        j = j + 1
+        k = k + 1
+
+
+# function for dividing and calling merge function
+def merge_sort(Array):
+    n = len(Array)
+    if n < 2:
+        return
+
+    mid = n // 2
+    left = []
+    right = []
+
+    for i in range(mid):
+        number = Array[i]
+        left.append(number)
+
+    for k in range(mid, n):
+        number = Array[k]
+        right.append(number)
+
+    merge_sort(left)
+    merge_sort(right)
+
+    merge(left, right, Array)
+
+
+create_file()
+file_fragmentation()
+
+for i in range(1, 11):
+    with open(str(i) + ".txt", "r") as file:
+        list_of_nums = file.read()
+    list_of_nums = list_of_nums.split("\n");
+    list_of_nums.remove("")
+    merge_sort(list_of_nums)
+    with open(str(i) + ".txt", "w") as file:
+        for item in list_of_nums:
+            file.write(str(item))
+            file.write("\n")
+
+
+
+
+file_order = 11
+memory_limit = numbers_amount // 5
+
+for i in range(1, 11, 2):
+    file_number = i
+    with open(str(i) + ".txt", "r") as file:
+        first_list_of_nums = file.read()
+    with open(str(i + 1) + ".txt", "r") as file:
+        second_list_of_nums = file.read()
+    first_list_of_nums = first_list_of_nums.split("\n");
+    first_list_of_nums.remove('')
+    second_list_of_nums = second_list_of_nums.split("\n");
+    second_list_of_nums.remove('')
+    list_of_nums.clear()
+    for element in first_list_of_nums:
+        list_of_nums.append(element)
+    for element in second_list_of_nums:
+        list_of_nums.append(element)
+    merge_sort(list_of_nums)
+    with open(str(file_order) + ".txt", "w") as file:
+        for item in list_of_nums:
+            file.write(str(item))
+            file.write("\n")
+    file_order += 1
+
+for i in range(1, 11):
+    os.remove("E:\\bursa\\4 sem\\ISP\\LR2\\" + str(i) + ".txt")
+
+for i in range(11, 15, 2):
+    file_number = i
+
+    first_list_of_nums.clear()
+    second_list_of_nums.clear()
+
+    with open(str(i) + ".txt", "r") as file:
+        for line in range(1, memory_limit//2 + 1):
+            number = linecache.getline(str(i) + ".txt", line)
+            first_list_of_nums.append(number.replace("\n", ""))
+    with open(str(i + 1) + ".txt", "r") as file:
+        for line in range(1, memory_limit//2 + 1):
+            number = linecache.getline(str(i + 1) + ".txt", line)
+            second_list_of_nums.append(number.replace("\n", ""))
+    list_of_nums.clear()
+    for element in first_list_of_nums:
+        list_of_nums.append(element)
+    for element in second_list_of_nums:
+        list_of_nums.append(element)
+    merge_sort(list_of_nums)
+
+    with open(str(file_order) + ".txt", "w") as file:
+        for item in list_of_nums:
+            file.write(str(item))
+            file.write("\n")
+
+    first_list_of_nums.clear()
+    second_list_of_nums.clear()
+    with open(str(i) + ".txt", "r") as file:
+        for line in range(memory_limit // 2 + 1, memory_limit + 1):
+            number = linecache.getline(str(i) + ".txt", line)
+            first_list_of_nums.append(number.replace("\n", ""))
+    with open(str(i + 1) + ".txt", "r") as file:
+        for line in range(memory_limit // 2 + 1, memory_limit + 1):
+            number = linecache.getline(str(i + 1) + ".txt", line)
+            second_list_of_nums.append(number.replace("\n", ""))
+
+    list_of_nums.clear()
+    for element in first_list_of_nums:
+        list_of_nums.append(element)
+    for element in second_list_of_nums:
+        list_of_nums.append(element)
+    merge_sort(list_of_nums)
+
+    with open(str(file_order) + ".txt", "a") as file:
+        for item in list_of_nums:
+            file.write(str(item))
+            file.write("\n")
+    file_order += 1
+
+for i in range(11, 15):
+    os.remove("E:\\bursa\\4 sem\\ISP\\LR2\\" + str(i) + ".txt")
+
+memory_limit *= 1.5
+
+with open(str(15) + ".txt", "r") as file:
+    buffer_list_of_nums = file.read()
+buffer_list_of_nums = buffer_list_of_nums.split("\n");
+buffer_list_of_nums.remove("")
+list_of_nums.clear()
+for element in buffer_list_of_nums:
+    list_of_nums.append(element)
+
+
+
+
+
+
+merge_sort(list_of_nums)
+with open("result.txt", "a") as file:
+    for item in list_of_nums:
+        file.write(str(item))
+        file.write("\n")
